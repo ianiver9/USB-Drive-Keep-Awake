@@ -23,3 +23,36 @@ A lightweight PowerShell solution to prevent external hard drives from entering 
 ```powershell
 cd C:\Scripts\USBKeepAwake
 .\install_hddkeepawake.ps1 -DriveLabel "YOUR_DRIVE_LABEL" -IntervalMinutes 5
+```
+
+*Replace `"YOUR_DRIVE_LABEL"` with the name of your drive (e.g., "BackupPlus", "12TB").*
+*Replace `5` with the number of minutes (choose a number lower than your drive's sleep timeout).*
+
+## Verification
+
+1.  Open your external drive.
+2.  Look for a file named `keepalive_log.txt`.
+3.  Open it and verify that new timestamps are appearing according to your schedule.
+
+## Uninstallation
+
+To stop the utility, you can remove the scheduled task using one of two methods:
+
+**Method 1: Using PowerShell (Recommended)**
+Open PowerShell as Administrator and run:
+
+```powershell
+Unregister-ScheduledTask -TaskName "Keep YOUR_DRIVE_LABEL Awake"
+```
+*(Replace `YOUR_DRIVE_LABEL` with the actual label you used during installation)*
+
+**Method 2: Using Task Scheduler UI**
+1. Press `Win + R`, type `taskschd.msc`, and hit Enter.
+2. In the **Task Scheduler Library**, find the task named **"Keep [YourLabel] Awake"**.
+3. Right-click the task and select **Delete**.
+
+## Maintenance
+
+* **Log File Growth:** The script appends a short text line to `keepalive_log.txt` every time it runs.
+* **Size Impact:** The file grows very slowly (approx. 25-30 MB per year if running every minute).
+* **Cleanup:** You can safely delete `keepalive_log.txt` manually at any time. The script will simply create a new one on its next scheduled run.
